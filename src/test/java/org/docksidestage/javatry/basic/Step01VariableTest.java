@@ -24,7 +24,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author KenshiMoriya
  */
 public class Step01VariableTest extends PlainTestCase {
 
@@ -47,8 +47,17 @@ public class Step01VariableTest extends PlainTestCase {
         String piari = null;
         String dstore = "mai";
         sea = sea + land + piari + ":" + dstore;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => mystic8:mai(x) => mystic8null:mai
     }
+    // ---誤答原因---
+    // Stringのnullは文字列連結（+で連結）すると文字列"null"に変換される
+    // ---挙動の理解---
+    // String a = null; の形でnull初期化することは問題ないが、null変数に対してメソッドを呼び出すと、実行時にNullPointerException（NPE）が発生する
+    // しかし、例外的に文字列連結・==による比較・静的メソッドに渡す場合は問題ない
+    // ---補足---
+    // Javaの基本型（プリミティブ型）はbyte, short, int, long, float, double, char, booleanの８つ
+    // 文字列はStringクラス（参照型、オブジェクト）として提供される
+    // Stringはimmutable -> 一度作ったStringの中身は変更できない -> 連結などでは新しいオブジェクトが作られる
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_basic() {
@@ -56,8 +65,12 @@ public class Step01VariableTest extends PlainTestCase {
         String land = "oneman";
         sea = land;
         land = land + "'s dreams";
-        log(sea); // your answer? => 
+        log(sea); // your answer? => oneman(o)
     }
+    // ---誤答原因---
+    // ---挙動の理解---
+    // sea = landの処理後にland(String)を書き換えているためseaには影響しない
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_int() {
@@ -65,8 +78,12 @@ public class Step01VariableTest extends PlainTestCase {
         int land = 415;
         sea = land;
         land++;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 415(o)
     }
+    // ---誤答原因---
+    // ---挙動の理解---
+    // sea = landの処理後にland(int)をインクリメントしているためseaには影響しない
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_BigDecimal() {
@@ -75,8 +92,18 @@ public class Step01VariableTest extends PlainTestCase {
         sea = land;
         sea = land.add(new BigDecimal(1));
         sea.add(new BigDecimal(1));
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 417(x) => 416
     }
+
+    // ---誤答原因---
+    // sea.add(...)のように返り値を受け取らない演算は無意味となる
+    // ---挙動の理解---
+    // sea = land;は値のコピーではなく参照の付け替え
+    // BigDecimalはimmutable
+    // -> sea.add(new BigDecimal(1));の行は返り値を変数に代入していないため無意味
+    // ---補足---
+    // BigDecimalは任意制度で正確な10進数（小数）を扱うためのクラス（java.mathに含まれる）
+    // double, floatでは内部的に2進数のため、10進数の小数を正確に表せない
 
     // ===================================================================================
     //                                                                   Instance Variable
@@ -89,14 +116,30 @@ public class Step01VariableTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_String() {
         String sea = instanceBroadway;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => null(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // isntanceBroadwayはインスタンス変数
+    // -> インスタンス変数は自動でデフォルト値が入る
+    // -> Stringのデフォルトはnull
+    // -> log(sea);でnullが出力される
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_int() {
         int sea = instanceDockside;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 0(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // instanceDocksideはインスタンス変数
+    // -> インスタンス変数は自動でデフォルト値が入る
+    // -> intのデフォルトは0
+    // -> log(sea);で0が出力される
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_Integer() {
