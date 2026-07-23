@@ -58,6 +58,8 @@ public class Step01VariableTest extends PlainTestCase {
     // Javaの基本型（プリミティブ型）はbyte, short, int, long, float, double, char, booleanの８つ
     // 文字列はStringクラス（参照型、オブジェクト）として提供される
     // Stringはimmutable -> 一度作ったStringの中身は変更できない -> 連結などでは新しいオブジェクトが作られる
+    // TODO moriya [いいね] カテゴリごとにメモが書かれていてわかりやすいですね^^ by jflute (2026/07/23)
+    // NullPointerのことまで学ばれていて素晴らしいです。null変数の連結は例外にならないんですよね。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_basic() {
@@ -71,6 +73,7 @@ public class Step01VariableTest extends PlainTestCase {
     // ---挙動の理解---
     // sea = landの処理後にland(String)を書き換えているためseaには影響しない
     // ---補足---
+    // TODO moriya [いいね] アドレスのコピーをしているだけですから、seaの参照先には影響ないわけです by jflute (2026/07/23)
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_int() {
@@ -104,6 +107,7 @@ public class Step01VariableTest extends PlainTestCase {
     // ---補足---
     // BigDecimalは任意制度で正確な10進数（小数）を扱うためのクラス（java.mathに含まれる）
     // double, floatでは内部的に2進数のため、10進数の小数を正確に表せない
+    // TODO jflute 1on1にて、immutableのお話をじっくり (2026/07/23)
 
     // ===================================================================================
     //                                                                   Instance Variable
