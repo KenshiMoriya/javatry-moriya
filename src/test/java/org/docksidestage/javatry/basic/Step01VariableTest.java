@@ -58,22 +58,38 @@ public class Step01VariableTest extends PlainTestCase {
     // Javaの基本型（プリミティブ型）はbyte, short, int, long, float, double, char, booleanの８つ
     // 文字列はStringクラス（参照型、オブジェクト）として提供される
     // Stringはimmutable -> 一度作ったStringの中身は変更できない -> 連結などでは新しいオブジェクトが作られる
-    // TODO moriya [いいね] カテゴリごとにメモが書かれていてわかりやすいですね^^ by jflute (2026/07/23)
+    // done moriya [いいね] カテゴリごとにメモが書かれていてわかりやすいですね^^ by jflute (2026/07/23)
     // NullPointerのことまで学ばれていて素晴らしいです。null変数の連結は例外にならないんですよね。
+    // #1on1: 他の言語だと？ (2026/07/23)
+    // C#だと、空文字になるので、Javaとは違う。でも例外にならないことは同じ。
+    // ちなみに、SQLだと sea + land + piari... → null (確かに)
+    // プログラミング言語の決めの問題。
+    // nullのメール文言の例。画面とメールの気合いの入れ方の違い。
+    // "null" って表示されるメリデメ:
+    // デメリット: 画面やメールでnullって出やすくて体裁が悪い
+    // メリット: (開発時)nullって出てわかりやすい by もりやさん
+    // 些細な違いでも、必ずメリデメはあるので、それを分析する習慣が大事。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_basic() {
-        String sea = "mystic";
-        String land = "oneman";
-        sea = land;
-        land = land + "'s dreams";
+        String sea = "mystic"; // 1丁目1番地
+        String land = "oneman"; // 2丁目2番地
+        sea = land; // どっちも2丁目2番地を指す
+        land = land + "'s dreams"; // 3丁目3番地(中間成果物インスタンス), 4丁目4番地
         log(sea); // your answer? => oneman(o)
     }
     // ---誤答原因---
     // ---挙動の理解---
     // sea = landの処理後にland(String)を書き換えているためseaには影響しない
     // ---補足---
-    // TODO moriya [いいね] アドレスのコピーをしているだけですから、seaの参照先には影響ないわけです by jflute (2026/07/23)
+    // done moriya [いいね] アドレスのコピーをしているだけですから、seaの参照先には影響ないわけです by jflute (2026/07/23)
+    // #1on1: 変数のアドレスの話 (2026/07/23)
+    // C言語でやってるのでイメージはOKそう。
+    // 変数とインスタンスは、1:1ではなく、many-to-oneになりうる。
+    // #1on1: インスタンスとは？ (2026/07/23)
+    // 一軒家の例、設計図(クラス)とインスタンスの関係性。
+    // 変数とインスタンスの関係性。
+    // BigDecimalインスタンス何個あるエクササイズ。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_int() {
@@ -87,14 +103,15 @@ public class Step01VariableTest extends PlainTestCase {
     // ---挙動の理解---
     // sea = landの処理後にland(int)をインクリメントしているためseaには影響しない
     // ---補足---
+    // #1on1: プリミティヴ型の紹介。 (2026/07/23)
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_BigDecimal() {
-        BigDecimal sea = new BigDecimal(94);
-        BigDecimal land = new BigDecimal(415);
-        sea = land;
-        sea = land.add(new BigDecimal(1));
-        sea.add(new BigDecimal(1));
+        BigDecimal sea = new BigDecimal(94); // 1
+        BigDecimal land = new BigDecimal(415); // 2
+        sea = land; // 3 → x
+        sea = land.add(new BigDecimal(1)); // 4,5 → 3,4
+        sea.add(new BigDecimal(1)); // 6,7 → 5,6 (合計6インスタンス)
         log(sea); // your answer? => 417(x) => 416
     }
 
@@ -108,6 +125,17 @@ public class Step01VariableTest extends PlainTestCase {
     // BigDecimalは任意制度で正確な10進数（小数）を扱うためのクラス（java.mathに含まれる）
     // double, floatでは内部的に2進数のため、10進数の小数を正確に表せない
     // TODO jflute 1on1にて、immutableのお話をじっくり (2026/07/23)
+    // #1on1: immutable/mutable (2026/07/23)
+    // コーディングではけっこう聞いたことある。
+    // immutableとは？ (不変な)
+    // o immutableなインスタンス(クラス) (デフォルト) → BigDecimal
+    // o immutableな変数
+    // 
+    // #1on1 immutableのメリデメ (2026/07/23)
+    // immutableメリット: 決まった値など、変わってないことを保証したい
+    // 変わってないことを保証されると... → 可読性、安全性
+    // immutableデメリット:
+    // TODO jflute 次回デメリットから再開 (2026/07/23)
 
     // ===================================================================================
     //                                                                   Instance Variable
