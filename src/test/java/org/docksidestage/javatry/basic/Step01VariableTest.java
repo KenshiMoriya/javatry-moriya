@@ -176,8 +176,16 @@ public class Step01VariableTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_Integer() {
         Integer sea = instanceHangar;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => null(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // instanceHangarはインスタンス変数
+    // -> インスタンス変数は自動でデフォルト値が入る
+    // -> Integerのデフォルトはnull
+    // -> log(sea);でnullが出力される
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_via_method() {
@@ -185,8 +193,20 @@ public class Step01VariableTest extends PlainTestCase {
         instanceMagiclamp = "magician";
         helpInstanceVariableViaMethod(instanceMagiclamp);
         String sea = instanceBroadway + "|" + instanceDockside + "|" + instanceHangar + "|" + instanceMagiclamp;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => bigband|1|null|magician(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // instanceBroadway
+    // 同名のローカル変数も引数もない -> this.instanceBroadwayへの代入
+    // instanceDockside
+    // 同名のローカル変数も引数もない -> this.instanceDocksideへのインクリメント
+    // instanceMagiclanmp
+    // 引数が同名のフィールドを隠す（shadowing）-> フィールドは変わらない
+    // ---補足---
+    // フィールドを触りたい場合
+    // this.insanceMagiclampと書く
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
         instanceBroadway = "bigband";
@@ -205,8 +225,17 @@ public class Step01VariableTest extends PlainTestCase {
         String sea = "harbor";
         int land = 415;
         helpMethodArgumentImmutableMethodcall(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // ++land;
+    // primitiveなので呼び出し元のlandは415
+    // sea.concat(landStr);
+    // Stringはimmutableなので、concatは新しいStringを作るが、戻り値がないため受け取られない
+    // ---補足---
+    // 生成されたharbor416は、GC対象になる
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
         ++land;
@@ -222,8 +251,16 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("harbor");
         int land = 415;
         helpMethodArgumentMethodcall(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor416(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // StringBuilderはmutable
+    // appendは自分自身の内部バッファを書き換える（新しいオブジェクトを作らない）
+    // ---補足---
+    // String#concat -> 新しいオブジェクトを返す
+    // StringBuilder#append -> 自分を書き換えて自分を返す。
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
         ++land;
@@ -238,8 +275,18 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("harbor");
         int land = 415;
         helpMethodArgumentVariable(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // 元のオブジェクトは書き変わっていない
+    // 1. sea.toString() -> 変更なし
+    // 2. new StringBuilder(seaStr) -> 新しいオブジェクト生成
+    // 3. append(sea) -> 新オブジェクトが書き換わる"harbor416"
+    // 4. 引数のseaに代入
+    // ---補足---
+    // メソッド内のseaはメソッドを抜けたら誰も参照しない（IDEで確認）
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
         ++land;
@@ -266,8 +313,14 @@ public class Step01VariableTest extends PlainTestCase {
      * o すべての変数をlog()でカンマ区切りの文字列で表示
      * </pre>
      */
+    private int piari;
+
     public void test_variable_writing() {
         // define variables here
+        String sea = "mystic";
+        Integer land = null;
+        String answer = sea + "," + land + "," + piari;
+        log(answer);
     }
 
     // ===================================================================================
