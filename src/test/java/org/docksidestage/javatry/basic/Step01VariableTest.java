@@ -207,6 +207,10 @@ public class Step01VariableTest extends PlainTestCase {
     // ---補足---
     // フィールドを触りたい場合
     // this.insanceMagiclampと書く
+    // TODO moriya [いいね] yes, shadowing が発生していますね。 by jflute (2026/08/03)
+    // 同じ名前だからと言って、同じ変数とは限らないということで。
+    // また、メソッドを呼び出して引数を渡すというのは、変数という箱自体が相手に渡るわけではなく、
+    // 中身だけが渡るというイメージで。厳密にはオブジェクト型ならアドレスが伝達されるだけ。
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
         instanceBroadway = "bigband";
@@ -236,6 +240,7 @@ public class Step01VariableTest extends PlainTestCase {
     // Stringはimmutableなので、concatは新しいStringを作るが、戻り値がないため受け取られない
     // ---補足---
     // 生成されたharbor416は、GC対象になる
+    // TODO moriya [ふぉろー] 引数がimmutableであれば、helpを読まなくても結果がわかってしまいます by jflute (2026/08/03)
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
         ++land;
@@ -261,6 +266,7 @@ public class Step01VariableTest extends PlainTestCase {
     // ---補足---
     // String#concat -> 新しいオブジェクトを返す
     // StringBuilder#append -> 自分を書き換えて自分を返す。
+    // TODO moriya [よだん] せっかくなので、1on1で内部バッファを書き換えるコード読んでみたいですね^^ by jflute (2026/08/03)
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
         ++land;
@@ -287,6 +293,7 @@ public class Step01VariableTest extends PlainTestCase {
     // 4. 引数のseaに代入
     // ---補足---
     // メソッド内のseaはメソッドを抜けたら誰も参照しない（IDEで確認）
+    // TODO moriya [いいね] append()が呼ばれたインスタンスが別物ということですね by jflute (2026/08/03)
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
         ++land;
