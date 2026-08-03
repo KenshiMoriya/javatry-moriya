@@ -124,7 +124,7 @@ public class Step01VariableTest extends PlainTestCase {
     // ---補足---
     // BigDecimalは任意制度で正確な10進数（小数）を扱うためのクラス（java.mathに含まれる）
     // double, floatでは内部的に2進数のため、10進数の小数を正確に表せない
-    // TODO jflute 1on1にて、immutableのお話をじっくり (2026/07/23)
+    // done jflute 1on1にて、immutableのお話をじっくり (2026/07/23)
     // #1on1: immutable/mutable (2026/07/23)
     // コーディングではけっこう聞いたことある。
     // immutableとは？ (不変な)
@@ -134,8 +134,32 @@ public class Step01VariableTest extends PlainTestCase {
     // #1on1 immutableのメリデメ (2026/07/23)
     // immutableメリット: 決まった値など、変わってないことを保証したい
     // 変わってないことを保証されると... → 可読性、安全性
-    // immutableデメリット:
-    // TODO jflute 次回デメリットから再開 (2026/07/23)
+    // #1on1: 後半エクササイズで、immutable引数でメソッドのコードの読み飛ばしを説明 (2026/08/03)
+    //
+    // #1on1: immutableデメリット: (2026/08/03) 
+    // (by もりやさん)
+    // 1. パフォーマンス、つどつどnewする、インスタンス多すぎ
+    // 2. 戻り値の受け取り忘れがバグになる
+    // 3. add()の繰り返しの処理など、mutableの方が書くの世話ない (1とも絡むけど)
+    // → immutableは若干コーディングで手間を掛ける、意識して実装する必要がある
+    // → 徹底してimmutableに統一しようとすると、言語の高度な文法が欲しくなる
+    //
+    // よもやま: シュガーシンタックス (糖衣構文)
+    // 
+    // #1on1: immutableの歴史 (2026/08/03)
+    // o 昔のPCは、メモリが貧弱だった
+    // o インフラが発展して、PC都合のデメリットは薄くなって、人間都合のメリットを享受したいとなった
+    //
+    // #1on1: immutableのバランス (2026/08/03)
+    // immutable, どこまで徹底するか？
+    // o Javaだと、100%immutableはなかなか難しいので、(感覚値)8:2でimmutable/mutableみたいな感じ!? (2026/08/03)
+    //   (歴史的にも昔のクラスはmutableだし、文法もそこまでimmutable全推しじゃない印象)
+    //   → jfluteも、8:2感覚で、mutableで割り切る時は、mutableのデメリットが発生しないような工夫をする。
+    //     安全性と可読性の演出手段は、immutableだけじゃない。別の手段でも演出できるので、それを使って工夫する。
+    // o 他の言語だと、100%を目指す文化もあったりする。
+    //   (言語自体が目指しているか？いないか？)
+
+    // done jflute 次回デメリットから再開 (2026/07/23)
 
     // ===================================================================================
     //                                                                   Instance Variable
@@ -207,7 +231,7 @@ public class Step01VariableTest extends PlainTestCase {
     // ---補足---
     // フィールドを触りたい場合
     // this.insanceMagiclampと書く
-    // TODO moriya [いいね] yes, shadowing が発生していますね。 by jflute (2026/08/03)
+    // done moriya [いいね] yes, shadowing が発生していますね。 by jflute (2026/08/03)
     // 同じ名前だからと言って、同じ変数とは限らないということで。
     // また、メソッドを呼び出して引数を渡すというのは、変数という箱自体が相手に渡るわけではなく、
     // 中身だけが渡るというイメージで。厳密にはオブジェクト型ならアドレスが伝達されるだけ。
@@ -240,7 +264,9 @@ public class Step01VariableTest extends PlainTestCase {
     // Stringはimmutableなので、concatは新しいStringを作るが、戻り値がないため受け取られない
     // ---補足---
     // 生成されたharbor416は、GC対象になる
-    // TODO moriya [ふぉろー] 引数がimmutableであれば、helpを読まなくても結果がわかってしまいます by jflute (2026/08/03)
+    // done moriya [ふぉろー] 引数がimmutableであれば、helpを読まなくても結果がわかってしまいます by jflute (2026/08/03)
+    // #1on1: help読まないことで、読み飛ばしができる (2026/08/03)
+    // 逆に、変えないのにmutableなクラスで受け取ってると、読み飛ばしができなくて読み手が大変。
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
         ++land;
@@ -266,7 +292,8 @@ public class Step01VariableTest extends PlainTestCase {
     // ---補足---
     // String#concat -> 新しいオブジェクトを返す
     // StringBuilder#append -> 自分を書き換えて自分を返す。
-    // TODO moriya [よだん] せっかくなので、1on1で内部バッファを書き換えるコード読んでみたいですね^^ by jflute (2026/08/03)
+    // done moriya [よだん] せっかくなので、1on1で内部バッファを書き換えるコード読んでみたいですね^^ by jflute (2026/08/03)
+    // #1on1: char[]のvalueを別のメソッドに渡して、中身を上書きしていた (2026/08/03)
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
         ++land;
@@ -293,7 +320,8 @@ public class Step01VariableTest extends PlainTestCase {
     // 4. 引数のseaに代入
     // ---補足---
     // メソッド内のseaはメソッドを抜けたら誰も参照しない（IDEで確認）
-    // TODO moriya [いいね] append()が呼ばれたインスタンスが別物ということですね by jflute (2026/08/03)
+    // done moriya [いいね] append()が呼ばれたインスタンスが別物ということですね by jflute (2026/08/03)
+    // #1on1: ちょこっと、DBFluteのAbstractSqlClauseのコード読んでみた (2026/08/03)
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
         ++land;
