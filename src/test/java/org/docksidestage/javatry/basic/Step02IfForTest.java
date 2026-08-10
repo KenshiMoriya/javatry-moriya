@@ -52,8 +52,14 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 7;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // if (sea > 904) -> False
+    // else文で sea = 7 になる
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_if_elseif_basic() {
@@ -67,8 +73,15 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 9;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // プログラムは上から実行される
+    // else if (sea >= 904) -> True
+    // よって sea = 7 になる
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_if_elseif_nested() {
@@ -107,8 +120,28 @@ public class Step02IfForTest extends PlainTestCase {
         if (land) {
             sea = 10;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 1810(x) -> 10
     }
+
+    // ---誤答原因---
+    // sea = sea++ でseaは変化しない
+    // ---挙動の理解---
+    // else if (sea >= 903 || land) -> True
+    // if (sea % 2 == 0) -> True
+    // sea = sea++ * 2; で sea = 1808
+    // if (!land) -> True
+    // land = true;
+    // if (sea < 1810) -> True
+    // sea = 9;
+    // if (sea >= 9 || (sea > 7 && sea < 9)) -> True
+    // sea--; で sea = 8
+    // if (land) -> True
+    // sea = 10;
+    // ---補足---
+    // x = x++ は x = x (Javaの挙動)
+    // 1. 格納先 = ローカル変数 x
+    // 2. 右辺 x++ を評価 -> 式の値は 904、xが 905 になる
+    // 3. 格納先に 904 を書き込む <- 905 を上書き
 
     // ===================================================================================
     //                                                                       for Statement
@@ -123,8 +156,15 @@ public class Step02IfForTest extends PlainTestCase {
                 sea = stage;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // for文で i = 1 のとき
+    // String stage = stageList.get(1); // stage = dockside
+    // sea = stage; // sea = dockside
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_foreach_basic() {
@@ -133,8 +173,19 @@ public class Step02IfForTest extends PlainTestCase {
         for (String stage : stageList) {
             sea = stage;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // for (String stage : stageList) で要素数分ループ
+    // stage = broadway (最初)
+    // stage = dockside
+    // stage = hangar
+    // stage = magiclamp (最後)
+    // ---補足---
+    // Javaのシュガーシンタックス(イテレータ)
+    // for (String stage : stageList)
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_foreach_continueBreak() {
@@ -149,8 +200,17 @@ public class Step02IfForTest extends PlainTestCase {
                 break;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // for (String stage : stageList) で要素数分ループ
+    // stage = "hangar" のとき
+    // sea = "hangar";
+    // if (stage.contains("ga") -> True
+    // break; でループ終了
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_listforeach_basic() {
@@ -165,8 +225,20 @@ public class Step02IfForTest extends PlainTestCase {
             }
         });
         String sea = sb.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // stageList.forEach(stage -> {}) で要素数分ループ
+    // stage = "dockside" のとき
+    // if (stage.contains("i")) -> True
+    // sb.append("dockside"); で sb = "dockside"
+    // if (sb.length() > 0) -> True
+    // return でループ終了
+    // String sea = sb.toString(); で sea = "dockside"
+    // ---補足---
+    //
 
     // ===================================================================================
     //                                                                           Challenge
@@ -177,6 +249,16 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        List<String> stageList = prepareStageList();
+        List<String> containsAList = new ArrayList<>();
+        for (String stage : stageList) {
+            if (stage.contains("a")) {
+                containsAList.add(stage);
+            }
+        }
+        for (String stage : containsAList) {
+            log(stage);
+        }
     }
 
     // ===================================================================================
@@ -187,17 +269,34 @@ public class Step02IfForTest extends PlainTestCase {
      * (foreach文をforEach()メソッドへの置き換えてみましょう (修正前と修正後で実行結果が同じになるように))
      */
     public void test_iffor_refactor_foreach_to_forEach() {
+//        List<String> stageList = prepareStageList();
+//        String sea = null;
+//        for (String stage : stageList) {
+//            if (stage.startsWith("br")) {
+//                continue;
+//            }
+//        sea = stage;
+//        if (stage.contains("ga")) {
+//            break;
+//        }
+//        }
+//        log(sea); // should be same as before-fix
         List<String> stageList = prepareStageList();
-        String sea = null;
-        for (String stage : stageList) {
+        String[] result = new String[1];
+        boolean[] found = new boolean[1];
+        stageList.forEach(stage -> {
+            if (found[0]) {
+                return;
+            }
             if (stage.startsWith("br")) {
-                continue;
+                return;
             }
-            sea = stage;
+            result[0] = stage;
             if (stage.contains("ga")) {
-                break;
+                found[0] = true;
             }
-        }
+        });
+        String sea = result[0];
         log(sea); // should be same as before-fix
     }
 
