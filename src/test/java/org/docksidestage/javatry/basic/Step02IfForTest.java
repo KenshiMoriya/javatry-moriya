@@ -95,14 +95,14 @@ public class Step02IfForTest extends PlainTestCase {
             sea = ++sea * 2;
         } else if (sea >= 903 || land) {
             if (sea % 2 == 0) {
-                sea = sea++ * 2;
+                sea = sea++ * 2; // 1810(x) → 1808(o)
             }
             if (!land) {
-                land = true;
+                land = true; // 当たり: ここを通ったらseaが10
             } else if (sea <= 903) {
                 sea++;
             }
-            if (sea < 1810) {
+            if (sea < 1810) { // falseだと思ってたらtrue
                 sea = 8;
             }
         } else if (sea == 8) {
@@ -112,19 +112,45 @@ public class Step02IfForTest extends PlainTestCase {
             sea = 9;
         }
         if (sea >= 9 || (sea > 7 && sea < 9)) {
-            sea--;
-            if (sea % 2 == 1) {
-                sea++;
+            sea--; // 1810だと思ってたとしても、ここで1809になると思うはず
+            if (sea % 2 == 1) { // trueと思っちゃったかも → trueでOK
+                sea++; // 1810に戻った想定
             }
         }
-        if (land) {
-            sea = 10;
+        if (land) { // ここを見逃しちゃった？
+            sea = 10; // 疲れてた？
         }
         log(sea); // your answer? => 1810(x) -> 10
     }
+    // #1on1: アドバイス: 漠然読みして構造把握してから読む (2026/08/21)
+    // ここだと、変数宣言、でかif, 中if, 小if, ログの5つのレイヤーがある。
+    // 頭の中で地図を作った状態で読み進めていけば、ifの見逃しとかも少なくなるかも。
+
+    // #1on1: 漠然読みからフォーカス読み (2026/08/21)
+    // o 漠然読みして構造把握 (全体像を見る)
+    // o 目的に沿って当たり(ギャンブルポイント)を見つける
+    // o 当たりからフォーカス読みをする (逆さ読みも取り入れながら)
+    //
+    // $構造把握は意識していたが、フォーカス読みは新鮮。
+    //
+    // 意識の反復練習で何度もやっていって、当たりを見つけるスキルを高めていく。
+    // 
+    // ギャンブルに負けることもある。
+    // でも、損はない。構造把握もしてるし、landのライフサイクルも知ってるので...
+    // 0の状態から網羅読みするよりも速く網羅読みできるようになっているはず。
+    //
+    // 一方で、踏み込んだ分、次の当たりが見つかることも多い。
+    // なのでまたフォーカス読みを繰り返して3,4回やったとしても、
+    // 網羅読みするよりも速い可能性も高い。
+    //
+    // 仮説思考的なコードリーディング!?とも言えるかも。
+    // TODO moriya [読み物課題] My Favorite Book: 仮説思考 by jflute (2026/08/21)
+    // https://jflute.hatenadiary.jp/entry/20150111/kasetsu
 
     // ---誤答原因---
     // sea = sea++ でseaは変化しない
+    // #1on1: ↑これは誤答の誤答の原因。間違うにしても1810じゃなく8だった (2026/08/21)
+    // 本当の誤答原因は、landのifの見逃し。
     // ---挙動の理解---
     // else if (sea >= 903 || land) -> True
     // if (sea % 2 == 0) -> True
@@ -132,7 +158,7 @@ public class Step02IfForTest extends PlainTestCase {
     // if (!land) -> True
     // land = true;
     // if (sea < 1810) -> True
-    // sea = 9;
+    // sea = 9; // ？？？ ここを通ったと思った？ (実際は通ってない)
     // if (sea >= 9 || (sea > 7 && sea < 9)) -> True
     // sea--; で sea = 8
     // if (land) -> True
@@ -142,6 +168,14 @@ public class Step02IfForTest extends PlainTestCase {
     // 1. 格納先 = ローカル変数 x
     // 2. 右辺 x++ を評価 -> 式の値は 904、xが 905 になる
     // 3. 格納先に 904 を書き込む <- 905 を上書き
+    //
+    // #1on1: 伝統的なJavaのややこしい挙動 (2026/08/21)
+    // へー、くらいな感じで頭の片隅においておくくらいでOKで、
+    // 実際、インクリメントは、基本独立行で書くのが一般的に習慣化してる。
+    // 
+    // よもやま: 言語の互換性のコンセプト (2026/08/21)
+    // 互換性キープ寄り: Java // ここ最近は少し進化を重視して若干の互換崩しもある
+    // 進化を重視よりの言語もある。
 
     // ===================================================================================
     //                                                                       for Statement
@@ -269,18 +303,18 @@ public class Step02IfForTest extends PlainTestCase {
      * (foreach文をforEach()メソッドへの置き換えてみましょう (修正前と修正後で実行結果が同じになるように))
      */
     public void test_iffor_refactor_foreach_to_forEach() {
-//        List<String> stageList = prepareStageList();
-//        String sea = null;
-//        for (String stage : stageList) {
-//            if (stage.startsWith("br")) {
-//                continue;
-//            }
-//        sea = stage;
-//        if (stage.contains("ga")) {
-//            break;
-//        }
-//        }
-//        log(sea); // should be same as before-fix
+        //        List<String> stageList = prepareStageList();
+        //        String sea = null;
+        //        for (String stage : stageList) {
+        //            if (stage.startsWith("br")) {
+        //                continue;
+        //            }
+        //        sea = stage;
+        //        if (stage.contains("ga")) {
+        //            break;
+        //        }
+        //        }
+        //        log(sea); // should be same as before-fix
         List<String> stageList = prepareStageList();
         String[] result = new String[1];
         boolean[] found = new boolean[1];
