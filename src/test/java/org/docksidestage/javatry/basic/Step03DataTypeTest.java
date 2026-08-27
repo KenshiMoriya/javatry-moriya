@@ -26,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author KenshiMoriya
  */
 public class Step03DataTypeTest extends PlainTestCase {
 
@@ -54,8 +54,21 @@ public class Step03DataTypeTest extends PlainTestCase {
             BigDecimal addedDecimal = amba.add(new BigDecimal(land));
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // <landの挙動>
+    // Integer land = 416; // 416
+    // land = piari.getYear(); // 2001
+    // land = bonvo.getMonthValue(); // 10
+    // land--; // 9
+    // <seaの挙動>
+    // if (dstore) -> true
+    // (BigDecimal addedDecimal = amba.add(new BigDecimal(land));) // addedDecimal = 18.4
+    // sea = String.valueOf(addedDecimal); // 18.4
+    // ---補足---
 
     // ===================================================================================
     //                                                                           Primitive
@@ -82,8 +95,19 @@ public class Step03DataTypeTest extends PlainTestCase {
         if ((int) dstore > piari) {
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 2(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // if (dohotel && dstore >= piari) -> true
+    // if (amba == 2.3D) -> true
+    // sea = (byte) amba; // 2 (.3は切り捨て)
+    // if ((int) dstore > piari) -> false
+    // ---補足---
+    // byte : -128〜127
+    // byte -> short -> int -> long -> float -> double
+    // 小数から整数へのキャストは切り捨てになる（四捨五入ではない）
 
     // ===================================================================================
     //                                                                              Object
@@ -92,8 +116,16 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // 1. コンストラクタで"hanger"を受け取る
+    // 2. フィールドに保存する
+    // 3. getterで値を返す
+    // ---補足---
+    // フィールドはprivate finalなので再代入できない（コンストラクタで1回だけ代入）
 
     private static class St3ImmutableStage {
 

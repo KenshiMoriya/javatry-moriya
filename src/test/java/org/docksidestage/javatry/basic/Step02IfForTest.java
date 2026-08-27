@@ -25,7 +25,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author KenshiMoriya
  */
 public class Step02IfForTest extends PlainTestCase {
 
@@ -144,8 +144,9 @@ public class Step02IfForTest extends PlainTestCase {
     // 網羅読みするよりも速い可能性も高い。
     //
     // 仮説思考的なコードリーディング!?とも言えるかも。
-    // TODO moriya [読み物課題] My Favorite Book: 仮説思考 by jflute (2026/08/21)
+    // TODO done moriya [読み物課題] My Favorite Book: 仮説思考 by jflute (2026/08/21)
     // https://jflute.hatenadiary.jp/entry/20150111/kasetsu
+    // "論理によるアウトプットと感覚によるアウトプットの意識化"
 
     // ---誤答原因---
     // sea = sea++ でseaは変化しない
