@@ -144,9 +144,10 @@ public class Step02IfForTest extends PlainTestCase {
     // 網羅読みするよりも速い可能性も高い。
     //
     // 仮説思考的なコードリーディング!?とも言えるかも。
-    // TODO done moriya [読み物課題] My Favorite Book: 仮説思考 by jflute (2026/08/21)
+    // done moriya [読み物課題] My Favorite Book: 仮説思考 by jflute (2026/08/21)
     // https://jflute.hatenadiary.jp/entry/20150111/kasetsu
     // "論理によるアウトプットと感覚によるアウトプットの意識化"
+    // #1on1: 論理と感覚のコラボレーションでスキルアップ話 (2026/09/04)
 
     // ---誤答原因---
     // sea = sea++ でseaは変化しない
@@ -221,6 +222,18 @@ public class Step02IfForTest extends PlainTestCase {
     // ---補足---
     // Javaのシュガーシンタックス(イテレータ)
     // for (String stage : stageList)
+
+    // #1on1: Javaの文法としてのループ二つ (2026/09/04)
+    // o intあいのfor文: Java当初から (1995年) // 伝統的なfor文
+    // o 拡張for文(foreach文): Java10年目くらいから (2005年くらい) // 普通のfor文
+    // 
+    // 単純なシュガーシンタックスというわけでもないという話。
+    // そうです、イテレータです。
+    // 
+    // intあいのfor文は毎ループ探しに行っているので、Listの内容によっては遅い。
+    // (ArrayListは速いけど、LinkedListは遅いかも)
+    // 拡張for文はイテレータなので、どっちでもわりと速そう。
+    // と言う感じで仕組みが違うので、パフォーマンス的な特徴が変わってくる。
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_for_foreach_continueBreak() {
@@ -319,7 +332,10 @@ public class Step02IfForTest extends PlainTestCase {
         List<String> stageList = prepareStageList();
         String[] result = new String[1];
         boolean[] found = new boolean[1];
+        // ここはは、test_メソッドの管轄下であるが...
         stageList.forEach(stage -> {
+            // ここは、test_メソッドの管轄下ではない
+            // Lambda式が表現する別クラス別メソッドの管轄下
             if (found[0]) {
                 return;
             }
@@ -333,6 +349,40 @@ public class Step02IfForTest extends PlainTestCase {
         });
         String sea = result[0];
         log(sea); // should be same as before-fix
+
+        // #1on1: なんで外側のローカル変数の再代入ができないのか？ (2026/09/04)
+        // forEach()メソッドのコードを読んでみた。
+        // ただのメソッド、for文の代理人みたいな。
+        // step8の先取り、-> { はLambda式で、実装クラスの定義とnewのシュガーシンタックスみたいもの。
+        // ここだと、1ループの処理を表現するクラスをその場で定義してその場でnewしてる。
+        // for文とは、statementの管轄が全然違う。
+        // 別のローカルなので、ローカル変数のコンセプトからしたら、
+        // 別クラス別メソッドに、自分のローカル変数を書き換えられたらたまらん(カオス)。
+        // ただ、(finalなら)参照だけはOKになってて、参照だけならコピーで済むので、副作用も起きないから大丈夫。
+        //
+        // continue;break;ができない理由も、つながってくる。
+        // -> {} は、for文直下ではなく、別クラス別メソッドなので、(文法的に)ループから呼ばれるとは限らない。
+
+        // #1on1: forEach()メソッドの存在意義って？ (2026/09/04)
+        // forEach()メソッド: 拡張for文から10年くらい経って登場 (2015年くらい)
+        // 存在意義がなければ登場しない。
+        // 拡張for文に比べて何が良いのか？
+        //
+        // 拡張for文: 外側のローカル変数の再代入できる、continue;break;できる
+        // forEach()メソッド: ↑できない、↑できない
+        //
+        // $制約が活かされる？immutable/mutableと同じ？
+        // yes, 素晴らしい。
+        // 安全性、可読性、ストレートなループだったらforEach()メソッドの方が向く。
+        // webサービスだと、そういうループの方が圧倒的に多い。
+        // (フレームワークとかだとまた変わってくるけど)
+        // ということで、適材適所的なループ提供になっている。
+        //
+        // (ループから飛躍して、制限デザインの話)
+        // よもやま: 一方で、適材適所すぎるのもつらいという考え方も。
+        // 使い分けの判断コストという側面もある。
+        // 選択肢が多すぎると、人間そのコストが高くなってくる。(例えば7,8種類もあったりすると)
+        // 永遠のジレンマ。
     }
 
     /**
