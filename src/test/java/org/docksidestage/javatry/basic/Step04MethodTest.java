@@ -35,16 +35,32 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_call_basic() {
         String sea = supplySomething();
-        log(sea); // your answer? =>
+        log(sea); // your answer? => over(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // ---補足---
+    // supplySomething()の出力
+    // log("in supply: {}", sea); -> in supply: over
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_method_call_many() {
         String sea = functionSomething("mystic");
         consumeSomething(supplySomething());
         runnableSomething();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => mysmys(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // String sea = functionSomething("mystic");　-> sea = mysmys
+    // consumeSomething(supplySomething()); -> seaに影響なし
+    // runnableSomething(); -> seaに影響なし
+    // ---補足---
+    // consumeSomething(supplySomething());
+    // runnableSomething();
+    // 完全に別のローカル変数を触っている
 
     private String functionSomething(String name) {
         String replaced = name.replace("tic", "mys");
@@ -76,8 +92,16 @@ public class Step04MethodTest extends PlainTestCase {
         if (!land) {
             sea = sea + mutable.getStageName().length();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 910
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // helloMutable(sea - 4, land, mutable); -> setterにより、stageName = "mystic"
+    // if (!land) -> true
+    // sea = sea + mutable.getStageName().length(); -> 904 + 6 = 910
+    // ---補足---
+    // St4MutableStageはsetterを持つmutableなクラス
 
     private int helloMutable(int sea, Boolean land, St4MutableStage piari) {
         sea++;
@@ -115,7 +139,7 @@ public class Step04MethodTest extends PlainTestCase {
         }
         ++sea;
         sea = inParkCount;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 100(o)
     }
 
     private void offAnnualPassport(boolean hasAnnualPassport) {
@@ -128,10 +152,18 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
+    // ---誤答原因---
+    // ---挙動の理解---
+    // offAnnualPassport(hasAnnualPassport); -> 引数のhasAnnualPassportをfalseにする（インスタンス変数に影響なし）
+    // goToPark(); -> for文で ++inParkCount; を100回繰り返す（inParkCount = 100）
+    // sea = inParkCount; -> sea = 100
+    // ---補足---
+
     // ===================================================================================
     //                                                                           Challenge
     //                                                                           =========
     // write instance variables here
+    private boolean availableLogging = true;
     /**
      * Make private methods as followings, and comment out caller program in test method:
      * <pre>
@@ -152,12 +184,38 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_making() {
         // use after making these methods
-        //String replaced = replaceCwithB(replaceAwithB("ABC"));
-        //String sea = quote(replaced, "'");
-        //if (isAvailableLogging()) {
-        //    showSea(sea);
-        //}
+        String replaced = replaceCwithB(replaceAwithB("ABC"));
+        String sea = quote(replaced, "'");
+        if (isAvailableLogging()) {
+            showSea(sea);
+        }
     }
 
     // write methods here
+    private String replaceAwithB(String str) {
+        return str.replace("A", "B");
+    }
+
+    private String replaceCwithB(String str) {
+        return str.replace("C", "B");
+    }
+
+    private String quote(String str, String quote) {
+        return quote + str + quote;
+    }
+
+    private boolean isAvailableLogging() {
+        return availableLogging;
+    }
+
+    private void showSea(String str) {
+        log(str);
+    }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // replaceCwithB(replaceAwithB("ABC")) // ABC -> BBC -> BBB
+    // quote(replaced, "'") // BBB -> 'BBB'
+    // 実行結果 : 'BBB'
+    // ---補足---
 }
