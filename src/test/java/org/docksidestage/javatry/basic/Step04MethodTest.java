@@ -164,6 +164,7 @@ public class Step04MethodTest extends PlainTestCase {
     //                                                                           =========
     // write instance variables here
     private boolean availableLogging = true;
+
     /**
      * Make private methods as followings, and comment out caller program in test method:
      * <pre>
@@ -191,6 +192,12 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
+    // #1on1: いいね、メソッドの定義順が、呼び出し順序と一緒で直感的で把握しやすい (2026/09/18)
+    // $普段から気をつけている、まとまりも意識
+    // 多少、呼び出し順序を優先するか？まとまりを優先するか？悩むケースはあるけど...
+    // 少なくとも、そこに気を遣って考えて配置するって習慣自体が大事。100点じゃなくていい。
+    // (読み手に80点くらい読みやすいなと思ってもらえたらゴール)
+    // 
     // write methods here
     private String replaceAwithB(String str) {
         return str.replace("A", "B");
@@ -200,6 +207,11 @@ public class Step04MethodTest extends PlainTestCase {
         return str.replace("C", "B");
     }
 
+    // #1on1: いいね、第二引数の名前がわかりやすくて良い (2026/09/18)
+    // 第一引数は、業務的な意味を持っていない引数なので、もうstrとかでいいでしょう。
+    // 第二引数は、業務的な意味を持っているので、その業務を示す言葉あると良い。
+    // 引数名ってすごく大事、普通のローカル変数よりも大事。
+    // というのは、引数は呼び出し側へのインターフェースでもあるから。
     private String quote(String str, String quote) {
         return quote + str + quote;
     }
@@ -218,4 +230,16 @@ public class Step04MethodTest extends PlainTestCase {
     // quote(replaced, "'") // BBB -> 'BBB'
     // 実行結果 : 'BBB'
     // ---補足---
+
+    // #1on1: 一番下に追加される問題 (2026/09/18)
+    // 最初に書いた人が綺麗でも、その後、通りすがった人がどんどんゴミを捨てていく。
+    // $タグコメントがある程度の強制力になってる？
+    // Good, ありがとう。その意味合いもあって、現場で採用しているところもある。
+    // コード(クラス内の変数やメソッド)の業務カテゴリと階層構造を意識してもらいたい。
+    //
+    // 既存クラスを修正するとき、既存の「コード体裁デザイン」を把握して修正して欲しい。
+    // おじゃまします感。既存コードに対する責任は、今修正しようとしている人が持っている。
+    // なので、既存の「コード体裁デザイン」に対する責任も、今修正しようとしている人が持つ。
+    //private void land() {
+    //}
 }
