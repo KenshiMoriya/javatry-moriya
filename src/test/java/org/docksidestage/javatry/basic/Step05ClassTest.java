@@ -28,7 +28,7 @@ import org.docksidestage.unit.PlainTestCase;
  * (要件が曖昧なところがあれば、適切だと思われる仕様を決めても良いです)
  * 
  * @author jflute
- * @author your_name_here
+ * @author KenshiMoriya
  */
 public class Step05ClassTest extends PlainTestCase {
 
@@ -43,29 +43,58 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(7400);
         int sea = booth.getQuantity();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 9(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // quantityの初期値は10
+    // booth.buyOneDayPassport(7400) -> --quantity で quantity = 9
+    // ---補足---
+    // src/test/org/docksidestage/unit/flute/PlaninTestCase
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_overpay() {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10000(o) -> 7400(fixed)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // booth.buyOneDayPassport(10000); -> handedMoney = 10000
+    // salesProceed = handedMoney;
+    // ---補足---
+    // salesProceed = handedMoney; -> bug : 売り上げと渡したお金が同一になってしまっている
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_nosales() {
         TicketBooth booth = new TicketBooth();
         Integer sea = booth.getSalesProceeds();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => null(o)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // private Integer salesProceeds; // null allowed: until first purchase
+    // 今回は first purchase がないので null
+    // ---補足---
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_wrongQuantity() {
         Integer sea = doTest_class_ticket_wrongQuantity();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 9(o) -> 10(fixed)
     }
+
+    // ---誤答原因---
+    // ---挙動の理解---
+    // quantityの初期値は10
+    // booth.buyOneDayPassport(handedMoney) -> --quantity で quantity = 9
+    // ---補足---
+    // handedMoney = 7399 < 7400 -> 例外処理
+    // bug : 例外処理だが quantity が減ってしまっている
 
     private Integer doTest_class_ticket_wrongQuantity() {
         TicketBooth booth = new TicketBooth();
@@ -91,6 +120,10 @@ public class Step05ClassTest extends PlainTestCase {
         log(sea); // should be max quantity, visual check here
     }
 
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java に対する変更
+    // buyOnedDayPassport
+    // --quantity の処理をhandedMoneyチェック後に移動した
+
     /**
      * Fix the problem of sales proceeds increased by handed money. (Don't forget to fix also previous exercise answers) <br>
      * (受け取ったお金の分だけ売上が増えていく問題をクラスを修正して解決しましょう (以前のエクササイズのanswerの修正を忘れずに))
@@ -102,20 +135,26 @@ public class Step05ClassTest extends PlainTestCase {
         log(sea); // should be same as one-day price, visual check here
     }
 
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java に対する変更
+    // buyOneDayPassport
+    // salesProceeds の加算対象を handedMoney から ONE_DAY_PRICE に変更
+
     /**
      * Make method for buying two-day passport (price is 13200). (which can return change as method return value)
      * (TwoDayPassport (金額は13200) も買うメソッドを作りましょう (戻り値でお釣りをちゃんと返すように))
      */
     public void test_class_letsFix_makeMethod_twoday() {
         // uncomment after making the method
-        //TicketBooth booth = new TicketBooth();
-        //int money = 14000;
-        //int change = booth.buyTwoDayPassport(money);
-        //Integer sea = booth.getSalesProceeds() + change;
-        //log(sea); // should be same as money
-
-        // and show two-day passport quantity here
+        TicketBooth booth = new TicketBooth();
+        int money = 14000;
+        int change = booth.buyTwoDayPassport(money);
+        Integer sea = booth.getSalesProceeds() + change;
+        log(sea); // should be same as money
+        log(booth.getQuantity()); // and show two-day passport quantity here
     }
+
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java に対する変更
+    // buyTwoDayPassportメソッドを作成
 
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
@@ -126,6 +165,9 @@ public class Step05ClassTest extends PlainTestCase {
         booth.buyOneDayPassport(10000);
         log(booth.getQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
+
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java に対する変更
+    // buyPassportメソッドを作成し、冗長なロジックを統合
 
     // ===================================================================================
     //                                                                           Challenge
