@@ -50,6 +50,13 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
+    // TODO moriya いま、戻り値があるので、JavaDocでも戻り値の説明を入れましょう by jflute (2026/10/09)
+    // (ちなみに、日本語でOK)
+    // TODO moriya privateメソッドの方が、publicより下がJavaの慣習 by jflute (2026/10/09)
+    // TODO moriya publicとprivateでメソッド名の先頭を区別する慣習もある by jflute (2026/10/09)
+    // 些細ではあるけれども、コード上と会話上で区別しやすいように、工夫することがある。
+    // e.g. doBuyPassport(), internalBuyPassport(), ...
+    // よかったら、renameのリファクタリングを、1,2秒でやってみてください。
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
@@ -60,6 +67,11 @@ public class TicketBooth {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
+        // TODO moriya 引数でpriceを受け取って抽象化してるのに、ONE_DAY残っちゃってる by jflute (2026/10/09)
+        // #1on1: 再利用しようする過程の中のコピペの修正ミス (2026/10/09)
+        // めんどうでも一括置換/検索確認のススメ。というかめんどうじゃないような環境づくりをしておく。
+        // (jkcode.txt, jkerror.txt のよもやま話)
+        // よもやま: 指のお話、手間が掛からないからこそやろうと思うことがある。
         if (handedMoney < ONE_DAY_PRICE) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }

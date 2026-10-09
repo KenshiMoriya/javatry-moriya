@@ -139,6 +139,27 @@ public class Step05ClassTest extends PlainTestCase {
     // buyOneDayPassport
     // salesProceeds の加算対象を handedMoney から ONE_DAY_PRICE に変更
 
+    // #1on1: バグの種類 (とりあえず大きな2種類) (2026/10/09)
+    // o お金不足でもチケットが減る問題: 複数行の流れのバグ
+    //  i 比較的、見つけづらい
+    //  i 実務だと、もっと複雑な構造になってたりして順序が見えにくくなってたり
+    //  i 特に今回、テストしたとしても、ShortMoneyを発生させなければ気づかない
+    //
+    // o 受け取ったお金の分だけ売上が増えていく問題: 単行のロジックでバグ
+    //  i 比較的、見つけやすい
+    //
+    // 実装者として、流れのバグの方は見つけてもらえない可能性があるの意識
+    // レビューワーとして、流れのバグのことも気にする意識
+    //
+    // $自分の感覚としても、流れのバグはわかりにくい
+    // $特に、単行の方は、handedMoneyという変数名がわかりやすかった
+    //
+    // 確かに、handedMoney が money だったら、単行でもわかりにくくなる。
+    // (今後のフォローで使わせてもらいます)
+    // 単行バグとはいえ、油断はできない。
+    //
+    // STATUS と STATE の定数名のレビューのお話。
+
     /**
      * Make method for buying two-day passport (price is 13200). (which can return change as method return value)
      * (TwoDayPassport (金額は13200) も買うメソッドを作りましょう (戻り値でお釣りをちゃんと返すように))
