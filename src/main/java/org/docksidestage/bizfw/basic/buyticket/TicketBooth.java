@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import com.sun.java.accessibility.util.TopLevelWindowListener;
+
 /**
  * @author jflute
  */
@@ -50,29 +52,47 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
-    // TODO moriya いま、戻り値があるので、JavaDocでも戻り値の説明を入れましょう by jflute (2026/10/09)
+    // TODO done いま、戻り値があるので、JavaDocでも戻り値の説明を入れましょう by jflute (2026/10/09)
     // (ちなみに、日本語でOK)
-    // TODO moriya privateメソッドの方が、publicより下がJavaの慣習 by jflute (2026/10/09)
-    // TODO moriya publicとprivateでメソッド名の先頭を区別する慣習もある by jflute (2026/10/09)
+    // TODO done moriya privateメソッドの方が、publicより下がJavaの慣習 by jflute (2026/10/09)
+    // TODO done moriya publicとprivateでメソッド名の先頭を区別する慣習もある by jflute (2026/10/09)
     // 些細ではあるけれども、コード上と会話上で区別しやすいように、工夫することがある。
     // e.g. doBuyPassport(), internalBuyPassport(), ...
     // よかったら、renameのリファクタリングを、1,2秒でやってみてください。
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return The one-day passport ticket, which has not been used yet. (NotNull)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
-    private int buyPassport(Integer handedMoney, int price) {
+    public Ticket buyOneDayPassport(Integer handedMoney) {
+        doBuyPassport(handedMoney, ONE_DAY_PRICE);
+        return new Ticket(ONE_DAY_PRICE);
+    }
+
+    /**
+     * Buy two-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return The result of purchase, which has the two-day passport and the change. (NotNull)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     */
+    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
+        int change = doBuyPassport(handedMoney, TWO_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE), change);
+    }
+
+    private int doBuyPassport(Integer handedMoney, int price) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        // TODO moriya 引数でpriceを受け取って抽象化してるのに、ONE_DAY残っちゃってる by jflute (2026/10/09)
+        // TODO done moriya 引数でpriceを受け取って抽象化してるのに、ONE_DAY残っちゃってる by jflute (2026/10/09)
         // #1on1: 再利用しようする過程の中のコピペの修正ミス (2026/10/09)
         // めんどうでも一括置換/検索確認のススメ。というかめんどうじゃないような環境づくりをしておく。
         // (jkcode.txt, jkerror.txt のよもやま話)
         // よもやま: 指のお話、手間が掛からないからこそやろうと思うことがある。
-        if (handedMoney < ONE_DAY_PRICE) {
+        if (handedMoney < price) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
         --quantity;
@@ -82,14 +102,6 @@ public class TicketBooth {
             salesProceeds = price;
         }
         return handedMoney - price;
-    }
-
-    public void buyOneDayPassport(Integer handedMoney) {
-        buyPassport(handedMoney, ONE_DAY_PRICE);
-    }
-
-    public int buyTwoDayPassport(Integer handedMoney) {
-        return buyPassport(handedMoney, TWO_DAY_PRICE);
     }
 
     public static class TicketSoldOutException extends RuntimeException {

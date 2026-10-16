@@ -17,6 +17,8 @@ package org.docksidestage.javatry.basic;
 
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
+import org.docksidestage.bizfw.basic.buyticket.Ticket;
+import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -168,7 +170,7 @@ public class Step05ClassTest extends PlainTestCase {
         // uncomment after making the method
         TicketBooth booth = new TicketBooth();
         int money = 14000;
-        int change = booth.buyTwoDayPassport(money);
+        int change = booth.buyTwoDayPassport(money).getChange();
         Integer sea = booth.getSalesProceeds() + change;
         log(sea); // should be same as money
         log(booth.getQuantity()); // and show two-day passport quantity here
@@ -199,13 +201,16 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_ticket() {
         // uncomment out after modifying the method
-        //TicketBooth booth = new TicketBooth();
-        //Ticket oneDayPassport = booth.buyOneDayPassport(10000);
-        //log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
-        //log(oneDayPassport.isAlreadyIn()); // should be false
-        //oneDayPassport.doInPark();
-        //log(oneDayPassport.isAlreadyIn()); // should be true
+        TicketBooth booth = new TicketBooth();
+        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
+        log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
+        log(oneDayPassport.isAlreadyIn()); // should be false
+        oneDayPassport.doInPark();
+        log(oneDayPassport.isAlreadyIn()); // should be true
     }
+
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java に対する変更
+    // 戻り値をTicketに変更、購入成功でnew Ticket(...)
 
     /**
      * Now also you cannot get ticket if two-day passport, so return class that has ticket and change. <br>
@@ -213,13 +218,18 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_whole() {
         // uncomment after modifying the method
-        //TicketBooth booth = new TicketBooth();
-        //int handedMoney = 20000;
-        //TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
-        //Ticket twoDayPassport = buyResult.getTicket();
-        //int change = buyResult.getChange();
-        //log(twoDayPassport.getDisplayPrice() + change); // should be same as money
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 20000;
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
+        Ticket twoDayPassport = buyResult.getTicket();
+        int change = buyResult.getChange();
+        log(twoDayPassport.getDisplayPrice() + change); // should be same as money
     }
+
+    // src/main/java/bizfw/basic/buyticket/TicketBooth.java に対する変更
+    // Ticketと同じパッケージに結果クラス(TicketBuyResult)を作成
+    // 結果クラスは購入したチケットとお釣りを持つ
+    // Let's fix の test_class_letsFix_makeMethod_twoday() の該当行を修正
 
     /**
      * Now you can use only one in spite of two-day passport, so fix Ticket to be able to handle plural days. <br>
