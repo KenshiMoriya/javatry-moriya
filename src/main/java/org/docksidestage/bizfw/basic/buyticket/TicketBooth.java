@@ -17,6 +17,31 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 import com.sun.java.accessibility.util.TopLevelWindowListener;
 
+// TODO moriya ↑unusedなimport文を削除 by jflute (2026/10/23)
+// #1on1: IDEのあれこれ設定 (2026/10/23)
+// 設定によっては、もうimport文の整理整頓をcommand+Sに仕掛けることもできる。
+// (フォーマッターも同じく)
+// javatry, Eclipseでは自動でそのようになっている。
+// IntelliJの設定も入っているが、それを自動で有効にするのに一つ手間が必要なので、
+// デフォルトではimportの整理整頓もフォーマットもされないようになっている。
+// IntelliJの設定のお話: command+S強制に手間がかかる、そもそもcommand+S押さないかも。
+
+// #1on1: フォーマッターの設定の統一の必要性 (2026/10/23)
+// いろんなIDEを使っているチームで、設定の調整をしていなければ、
+// プルリクのたびに差分が生まれて役に立たないので、実質フォーマッター禁止になる。
+// (もしくは、CIでフォーマットする)
+//
+// いろんなIDEを使うチームでエディター上でフォーマットするなら、
+// 設定を調整してかなり同じフォーマット結果になるようにする必要がある。
+// (それが大変な場合は、やはりフォーマットはCIでやったりする)
+//
+// その設定の調整、javatryはやっている。
+
+// #1on1: import文の重要性 (ソースコードリーディングのコツ、漠然読みのテクニックの一つでもある) (2026/10/23)
+// import文は、そのクラスの依存関係(他のクラスとのコラボレーション)の情報を示している。
+// なので、そのクラスの概念/役割を想像しやすい。その上で詳細を読みにいった方が速い。
+// なのでなので、import文が汚れてるとノイズになる。
+// (他の言語も近いところはあると思われる)
 /**
  * @author jflute
  */
@@ -52,10 +77,10 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
-    // TODO done いま、戻り値があるので、JavaDocでも戻り値の説明を入れましょう by jflute (2026/10/09)
+    // done いま、戻り値があるので、JavaDocでも戻り値の説明を入れましょう by jflute (2026/10/09)
     // (ちなみに、日本語でOK)
-    // TODO done moriya privateメソッドの方が、publicより下がJavaの慣習 by jflute (2026/10/09)
-    // TODO done moriya publicとprivateでメソッド名の先頭を区別する慣習もある by jflute (2026/10/09)
+    // done moriya privateメソッドの方が、publicより下がJavaの慣習 by jflute (2026/10/09)
+    // done moriya publicとprivateでメソッド名の先頭を区別する慣習もある by jflute (2026/10/09)
     // 些細ではあるけれども、コード上と会話上で区別しやすいように、工夫することがある。
     // e.g. doBuyPassport(), internalBuyPassport(), ...
     // よかったら、renameのリファクタリングを、1,2秒でやってみてください。
@@ -87,7 +112,7 @@ public class TicketBooth {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        // TODO done moriya 引数でpriceを受け取って抽象化してるのに、ONE_DAY残っちゃってる by jflute (2026/10/09)
+        // done moriya 引数でpriceを受け取って抽象化してるのに、ONE_DAY残っちゃってる by jflute (2026/10/09)
         // #1on1: 再利用しようする過程の中のコピペの修正ミス (2026/10/09)
         // めんどうでも一括置換/検索確認のススメ。というかめんどうじゃないような環境づくりをしておく。
         // (jkcode.txt, jkerror.txt のよもやま話)
@@ -101,6 +126,8 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = price;
         }
+        // TODO moriya doBuyの範疇の中でどこかに "お釣り" であることを表現して欲しい by jflute (2026/10/23)
+        // 変数名で表現、メソッド名で表現、コメントで表現、どの方法でも良いので。
         return handedMoney - price;
     }
 

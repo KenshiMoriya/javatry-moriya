@@ -231,6 +231,7 @@ public class Step05ClassTest extends PlainTestCase {
     // 結果クラスは購入したチケットとお釣りを持つ
     // Let's fix の test_class_letsFix_makeMethod_twoday() の該当行を修正
 
+    // TODO jflute 次回ここから (2026/10/23)
     /**
      * Now you can use only one in spite of two-day passport, so fix Ticket to be able to handle plural days. <br>
      * (TwoDayPassportなのに一回しか利用できません。複数日数に対応できるようにTicketを修正しましょう)
