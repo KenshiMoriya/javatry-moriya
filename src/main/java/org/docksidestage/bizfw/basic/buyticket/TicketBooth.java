@@ -15,9 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-import com.sun.java.accessibility.util.TopLevelWindowListener;
 
-// TODO moriya ↑unusedなimport文を削除 by jflute (2026/10/23)
+// TODO done moriya ↑unusedなimport文を削除 by jflute (2026/10/23)
 // #1on1: IDEのあれこれ設定 (2026/10/23)
 // 設定によっては、もうimport文の整理整頓をcommand+Sに仕掛けることもできる。
 // (フォーマッターも同じく)
@@ -51,8 +50,6 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
-    private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
@@ -92,8 +89,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public Ticket buyOneDayPassport(Integer handedMoney) {
-        doBuyPassport(handedMoney, ONE_DAY_PRICE);
-        return new Ticket(ONE_DAY_PRICE);
+        return doBuyPassport(handedMoney, TicketType.ONE_DAY).getTicket();
     }
 
     /**
@@ -104,11 +100,11 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
-        int change = doBuyPassport(handedMoney, TWO_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE), change);
+        return doBuyPassport(handedMoney, TicketType.TWO_DAY);
     }
 
-    private int doBuyPassport(Integer handedMoney, int price) {
+    private TicketBuyResult doBuyPassport(Integer handedMoney, TicketType ticketType) {
+        int price = ticketType.getPrice();
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
@@ -126,8 +122,12 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = price;
         }
-        // TODO moriya doBuyの範疇の中でどこかに "お釣り" であることを表現して欲しい by jflute (2026/10/23)
+        // TODO done moriya doBuyの範疇の中でどこかに "お釣り" であることを表現して欲しい by jflute (2026/10/23)
         // 変数名で表現、メソッド名で表現、コメントで表現、どの方法でも良いので。
+        return new TicketBuyResult(new Ticket(ticketType), calculateChange(handedMoney, price));
+    }
+
+    private int calculateChange(int handedMoney, int price) {
         return handedMoney - price;
     }
 

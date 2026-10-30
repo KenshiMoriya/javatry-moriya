@@ -19,6 +19,7 @@ import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
+import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -238,7 +239,22 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_usePluralDays() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        Ticket twoDayPassport = booth.buyTwoDayPassport(13200).getTicket();
+        twoDayPassport.doInPark(); // Day 1
+        log(twoDayPassport.getRemainingDays(), twoDayPassport.isAlreadyIn()); // 1, false
+        twoDayPassport.doInPark(); // Day 2
+        log(twoDayPassport.getRemainingDays(), twoDayPassport.isAlreadyIn()); // 0, true
+        try {
+            twoDayPassport.doInPark(); // Day 3
+            fail("always exception but none");
+        } catch (IllegalStateException continued) {
+            log("Failed to in park: " + continued.getMessage());
+        }
     }
+
+    // Ticket は boolean alreadyIn で状態を評価
+    // 複数状態を評価するために「あと何日使えるか」を示す remainingDaysを導入
 
     /**
      * Accurately determine whether type of bought ticket is two-day passport or not by if-statement. (fix Ticket classes if needed) <br>
@@ -246,22 +262,22 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_whetherTicketType() {
         // uncomment when you implement this exercise
-        //TicketBooth booth = new TicketBooth();
-        //Ticket oneDayPassport = booth.buyOneDayPassport(10000);
-        //showTicketIfNeeds(oneDayPassport);
-        //TicketBuyResult buyResult = booth.buyTwoDayPassport(10000);
-        //Ticket twoDayPassport = buyResult.getTicket();
-        //showTicketIfNeeds(twoDayPassport);
+        TicketBooth booth = new TicketBooth();
+        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
+        showTicketIfNeeds(oneDayPassport);
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(13200);
+        Ticket twoDayPassport = buyResult.getTicket();
+        showTicketIfNeeds(twoDayPassport);
     }
 
     // uncomment when you implement this exercise
-    //private void showTicketIfNeeds(Ticket ticket) {
-    //    if (xxxxxxxxxxxxxxxxxx) { // write determination for two-day passport
-    //        log("two-day passport");
-    //    } else {
-    //        log("other");
-    //    }
-    //}
+    private void showTicketIfNeeds(Ticket ticket) {
+        if (ticket.getTicketType() == TicketType.TWO_DAY) { // write determination for two-day passport
+            log("two-day passport");
+        } else {
+            log("other");
+        }
+    }
 
     // ===================================================================================
     //                                                                           Good Luck
