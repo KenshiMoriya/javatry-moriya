@@ -1,7 +1,8 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
-// TODO done moriya クラスのJavaDocを入れておいてください by jflute (2026/10/23)
+// done moriya クラスのJavaDocを入れておいてください by jflute (2026/10/23)
 
+// TODO moriya @authorも入れておいてください by jflute (2026/11/06)
 /**
  * The result of buying ticket at the booth, which has the bought ticket and the change.
  */
@@ -20,6 +21,9 @@ public class TicketBuyResult {
         this.change = change;
     }
 
+    // #1on1: getterのjavadocの冗長じれんまについて (2026/11/06)
+    // jfluteだと、概要説明を省略したりする。
+    // TODO moriya 冗長の解決、抽象度を変えて工夫してもいいし、概要説明を削除でもいいし by jflute (2026/11/06)
     /**
      * Get the bought ticket.
      * @return The bought ticket, which has not been used at the time of buying. (NotNull)
@@ -27,7 +31,12 @@ public class TicketBuyResult {
     public Ticket getTicket() {
         return ticket;
     }
-
+    // #1on1: いいね、NotNull, NullAllowed, NotMinusの表現Good (2026/11/06)
+    // LastaFluteのコードの例も見てみた。Javaだとあるととても嬉しい。
+    // (at showbaseとかお遊びのコメントの話も)
+    // LocalDateのplus()の例、Java標準でもやっているところはある。
+    
+    // #1on1: いいね、こっちは抽象度を変えた表現になっていてどちらも価値のあるコメントになってる (2026/11/06)
     /**
      * Get the change returned to park guest.
      * @return The amount of change, zero if handed money is just the price. (Not Minus)

@@ -16,7 +16,7 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
 
-// TODO done moriya ↑unusedなimport文を削除 by jflute (2026/10/23)
+// done moriya ↑unusedなimport文を削除 by jflute (2026/10/23)
 // #1on1: IDEのあれこれ設定 (2026/10/23)
 // 設定によっては、もうimport文の整理整頓をcommand+Sに仕掛けることもできる。
 // (フォーマッターも同じく)
@@ -122,7 +122,7 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = price;
         }
-        // TODO done moriya doBuyの範疇の中でどこかに "お釣り" であることを表現して欲しい by jflute (2026/10/23)
+        // done moriya doBuyの範疇の中でどこかに "お釣り" であることを表現して欲しい by jflute (2026/10/23)
         // 変数名で表現、メソッド名で表現、コメントで表現、どの方法でも良いので。
         return new TicketBuyResult(new Ticket(ticketType), calculateChange(handedMoney, price));
     }

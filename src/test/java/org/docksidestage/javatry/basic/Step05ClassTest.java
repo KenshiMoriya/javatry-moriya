@@ -232,7 +232,7 @@ public class Step05ClassTest extends PlainTestCase {
     // 結果クラスは購入したチケットとお釣りを持つ
     // Let's fix の test_class_letsFix_makeMethod_twoday() の該当行を修正
 
-    // TODO jflute 次回ここから (2026/10/23)
+    // done jflute 次回ここから (2026/10/23)
     /**
      * Now you can use only one in spite of two-day passport, so fix Ticket to be able to handle plural days. <br>
      * (TwoDayPassportなのに一回しか利用できません。複数日数に対応できるようにTicketを修正しましょう)
@@ -256,6 +256,7 @@ public class Step05ClassTest extends PlainTestCase {
     // Ticket は boolean alreadyIn で状態を評価
     // 複数状態を評価するために「あと何日使えるか」を示す remainingDaysを導入
 
+    // TODO jflute 次回ここから、TicketTypeのお話をする (2026/11/06)
     /**
      * Accurately determine whether type of bought ticket is two-day passport or not by if-statement. (fix Ticket classes if needed) <br>
      * (買ったチケットの種別がTwoDayPassportなのかどうかをif文で正確に判定してみましょう。(必要ならTicketクラスたちを修正))

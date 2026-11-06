@@ -23,6 +23,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // #1on1: いいね、remainingDays, とても直感的でわかりやすい (2026/11/06)
     private final TicketType ticketType;
     private final int displayPrice; // written on ticket, park guest can watch this
     private int remainingDays; // 0 means this ticket is unavailable
@@ -61,7 +62,22 @@ public class Ticket {
         return remainingDays;
     }
 
+    // #1on1: いいね、互換性のために残している良い。 (2026/11/06)
+    // 実際の現場だと、修正仕切っちゃうか、互換性のために残すか、選択肢はあるけど。
+    // deprecated運用の紹介。
     public boolean isAlreadyIn() {
+        // #1on1: 実装見ると、1日でも入るとtrueになる仕様 (2026/11/06)
+        // それで良かった？
+        // 呼び出し側が「使い切ってるかどうか？」のつもりで呼び出してたらデグレになる。
+        // alreadyInの変数のコメントで、unavailableという言葉があったので、
+        // 一応使い切ってるかどうか？のニュアンスで作られていた。
+        //
+        // 新機能による既存概念の崩れに気づけるか？
+        // こういったものづくりスキルに注目してもらいたい。
+        //
+        // $test_class_moreFix_usePluralDays()の方では使い切りのニュアンスで自分で実装してる
+        // それも素晴らしい体験の一つ。失敗の思い出をたくさん作るのが大事。
+        // TODO moriya 内容も互換性キープ by jflute (2026/11/06)
         return remainingDays < ticketType.getDays();
     }
 }
